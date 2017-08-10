@@ -30,11 +30,6 @@ TreeItem *TreeItem::childAt(int row) const
     return m_childItems.value(row);
 }
 
-TreeItem *TreeItem::getChild(int row)
-{
-    return m_childItems.value(row);
-}
-
 int TreeItem::childCount() const
 {
     return m_childItems.count();

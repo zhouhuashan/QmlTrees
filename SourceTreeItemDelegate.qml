@@ -2,93 +2,85 @@ import QtQuick 2.0
 import "scripts/itemcreation.js" as Code
 Item {
     property color baseColor:'orange'
-    property bool copyable:true
-    property alias mouseArea: itemMouseArea
-    property alias rectangle: contentItemWrapper
-    property Rectangle draggedItemParent
-    property Item contentPresenterItem
+
+    property Item parentWhenItemBeingDragged
+
+
     id: item
+    objectName: "draggableItem"
 
-    width:contentItem.width
-    height:contentItem.height
+    MouseArea {
+        id:dragArea
+            property bool held: false
+        objectName: "dragArea"
+        anchors { left: parent.left; right: parent.right }
+        height: content.height
+        drag.target: held ? content : undefined
 
-    onContentPresenterItemChanged: {
-        contentPresenterItem.parent = contentItemWrapper;
-    }
+        Rectangle {
+            id: content
+            objectName: "content"
+            color: dragArea.held ? "lightsteelblue" : baseColor
+            border.width: 1
+            anchors {
+                horizontalCenter: parent.horizontalCenter
+                verticalCenter: parent.verticalCenter
+            }
+            width: dragArea.width
+            height:40
+            Drag.active: dragArea.drag.active
 
-
-    Rectangle {
-            id: contentItemWrapper
-            color:baseColor
-            anchors.fill: parent
-            Drag.active: itemMouseArea.drag.active
+            Text {
+                text: styleData.value
+            }
+            Drag.mimeData: { "text/plain": "Hello" }
+            Drag.dragType: Drag.Internal
+            Drag.supportedActions: Qt.CopyAction
             Drag.hotSpot {
-                x: contentPresenterItem.width / 2
-                y: contentPresenterItem.height / 2
+                x: content.width / 2
+                y: content.height / 2
             }
-            MouseArea {
-                id:itemMouseArea
-                anchors.fill: parent
-                drag.target: contentItemWrapper
-            }
+        }
+        onReleased: {
+            held = false
+            console.log("held:", held)
+            // Code.endDrag(mouse)
+            //parent.Drag.drop()
+            parent = content.Drag.target !== null ? content.Drag.target : item
+            content.Drag.drop()
+        }
+        onPressAndHold: {
+            held = true
+            console.log("held:", held)
+        }
+        onPressed: {
+        }
+
+        onPositionChanged: {
+                //Code.continueDrag(mouse);
+        }
+
     }
-//    Rectangle{
-//        id: itemRectangle
-//        color:baseColor
-//        width:parent.width - 10
-//        height: parent.height - 2
-//        anchors.fill: parent
-//        Drag.active: itemMouseArea.drag.active
-//        Drag.hotSpot {
-//            x: 0
-//            y: 0
-//        }
-//        Text {
-//            anchors.verticalCenter: parent.verticalCenter
-//            color: styleData.textColor
-//            elide: styleData.elideMode
-//            text: styleData.value
-//        }
-//        onPressed: {
-//            if (copyable)
-//            {
-
-//                //Code.startDrag(mouse, root, item);
-//            }
-//        }
-
-//        onReleased: {
-//            if (copyable)
-//            {
-//                //Code.endDrag(mouse);
-//            }
-//        }
-//        onPositionChanged: {
-//            if (copyable)
-//            {
-//                //Code.continueDrag(mouse);
-//            }
-//        }
-    //}
 
     states: [
-            State {
-                when: itemMouseArea.drag.active
-                name: "dragging"
+        State {
+            when: dragArea.held
+            name: "draggingState"
 
-                ParentChange {
-                    target: contentItemWrapper
-                    parent: draggedItemParent
-                }
-                PropertyChanges {
-                    target: contentItemWrapper
-                    opacity: 0.5
-                    anchors.fill: undefined
-                    width: 14
-                    height: 14
-                }
-
-
+            ParentChange {
+                target: content
+                parent: parentWhenItemBeingDragged
             }
+            PropertyChanges {
+                target: content
+                opacity: 0.3
+            }
+
+            AnchorChanges{
+                target:content
+                anchors.horizontalCenter: undefined;
+                anchors.verticalCenter: undefined
+            }
+        }
     ]
 }

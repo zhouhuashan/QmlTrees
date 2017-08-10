@@ -5,27 +5,29 @@ import QtQuick.Controls 1.5
 
 ApplicationWindow {
     visible: true
+    id:root
     width: 640
     height: 480
     title: qsTr("Dragging elements between trees example")
     color: 'black'
     Rectangle
     {
-        width:parent.width - 10
+        objectName: "mainApplicationRectangle"
+        width: parent.width - 10
         height: parent.height - 10
         anchors.centerIn: parent
         color: 'cyan'
-        id:root
+        id: rootRectangle
         Row
         {
-            height:parent.height - 10
+            height: parent.height - 10
             anchors.centerIn: parent
-            width:parent.width - 10
-            spacing:40
+            width: parent.width - 10
+
             TreeView
             {
                 id: sourceTreeView
-                height:parent.height
+                height: parent.height
 
                 TableViewColumn {
                         title: "Drag items from here!"
@@ -35,58 +37,52 @@ ApplicationWindow {
                 model: MyTreeModel
 
                 rowDelegate: Rectangle {
-                   height: 40
-                   color: 'red'
+                    height: 40
+                    color: 'red'
                 }
 
                 itemDelegate: SourceTreeItemDelegate {
-                    baseColor:'orange'
-                    draggedItemParent: root
-                    height:40
-                    width: 100
-                    contentPresenterItem: Rectangle {
-                        height: parent.height
-                        width: parent.width - 10
-                        color: "yellow"
-                        Text{text:model?model.ItemSummary:""}
-                    }
+                    baseColor: 'orange'
+                    parentWhenItemBeingDragged: rootRectangle
                 }
             }
-            Rectangle{
-                color:'blue'
-                width:300
-                height:300
+
                 DropArea
                 {
                     id:dropArea
-                    height:parent.height
-                    width:parent.width
+                    objectName: "dropArea"
+                    width: 300; height: 300
+                    Rectangle{
+                        color: 'blue'
+                        anchors.fill: parent
+                        id: dropRectangle
+                        objectName: "dropRectangle"
+                        width: 300
+                        height: 300
+                    }
                     onDropped: {
-                        drop.acceptProposedAction()
+                        //drop.acceptProposedAction()
                         var txt = drop.text;
                         var fmts = JSON.stringify(drop.formats);
-                        console.log("dropped into dest")
+                        console.log("dropped into dest ", txt)
                     }
                     onEntered: {
                         console.log("entered dest")
                     }
+                    onExited: {
 
-                    property int dropIndex
-
-//                    Rectangle {
-//                        id: dropIndicator
-//                        anchors {
-//                            left: parent.left
-//                            right: parent.right
-//                            top: dropIndex === 0 ? parent.verticalCenter : undefined
-//                            bottom: dropIndex === 0 ? undefined : parent.verticalCenter
-//                        }
-//                        height: 2
-//                        opacity: dropArea.containsDrag ? 0.8 : 0.0
-//                        color: "red"
-//                    }
+                    }
+                    states: [
+                        State {
+                            when: dropArea.containsDrag
+                            PropertyChanges {
+                                target: dropRectangle
+                                color: "grey"
+                            }
+                        }
+                    ]
                 }
-            }
+
 
         }
 

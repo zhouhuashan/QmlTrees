@@ -17,8 +17,7 @@ public:
     explicit TestTreeModel(std::multimap<QString, QString> data, QObject *parent = nullptr);
     ~TestTreeModel();
 
-    Q_INVOKABLE virtual QModelIndex index(int row, int column,
-                              const QModelIndex &parent = QModelIndex()) const override;
+    Q_INVOKABLE virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     Q_INVOKABLE virtual QModelIndex parent(const QModelIndex &index) const override;
 
     Q_INVOKABLE virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -28,8 +27,10 @@ public:
     virtual QHash<int,QByteArray> roleNames() const override;
 
     TreeItem *itemForIndex(const QModelIndex &index) const;
-
-    Qt::ItemFlags flags(const QModelIndex &index) const;
+    QStringList mimeTypes() const;
+    QMimeData *mimeData(const QModelIndexList &indexes) const override;
+    bool dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent) override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
 
     Qt::DropActions supportedDragActions() const
     { return Qt::MoveAction|Qt::CopyAction; }

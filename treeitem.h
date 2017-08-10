@@ -14,9 +14,8 @@ public:
     ~TreeItem();
     void appendChild(TreeItem *child);
 
-    TreeItem *getChild(int row);
-    TreeItem *getParent() const { return m_parentItem; }
-    TreeItem *childAt(int row) const;
+    TreeItem* getParent() const { return m_parentItem; }
+    TreeItem* childAt(int row) const;
 
     int childCount() const;
     int columnCount() const;
@@ -24,7 +23,7 @@ public:
 
     QString data() const;
     int row() const;
-    TreeItem *parentItem();
+    TreeItem* parentItem();
 };
 
 #endif // TREENODE_H

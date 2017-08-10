@@ -1,6 +1,8 @@
 #include "testtreemodel.h"
 #include <set>
 #include <iterator>
+#include <QMimeData>
+
 int ColumnCount = 1;
 
 TestTreeModel::TestTreeModel(std::multimap<QString, QString> data, QObject *parent)
@@ -59,6 +61,55 @@ int TestTreeModel::rowCount(const QModelIndex &parent) const
     }
     TreeItem *parentItem = itemForIndex(parent);
     return parentItem ? parentItem->childCount() : 0;
+}
+
+QStringList TestTreeModel::mimeTypes() const
+ {
+     QStringList types;
+     types << "text/plain";
+     return types;
+ }
+
+bool TestTreeModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent)
+{
+    if (action == Qt::IgnoreAction)
+        return true;
+
+    if (!data->hasFormat("text/plain"))
+        return false;
+
+    if (column > 0)
+        return false;
+
+
+    int beginRow;
+
+    if (row != -1)
+        beginRow = row;
+
+    else if (parent.isValid())
+        beginRow = parent.row();
+
+    else
+        beginRow = rowCount(QModelIndex());
+}
+
+QMimeData *TestTreeModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QByteArray encodedData;
+
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+
+    foreach (QModelIndex index, indexes) {
+        if (index.isValid()) {
+            QString text = data(index, Qt::DisplayRole).toString();
+            stream << text;
+        }
+    }
+
+    mimeData->setData("application/vnd.text.list", encodedData);
+    return mimeData;
 }
 
 TreeItem *TestTreeModel::itemForIndex(const QModelIndex &index) const
