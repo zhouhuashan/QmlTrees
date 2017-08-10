@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>scripts/itemcreation.js</file>
+        <file>SourceTreeItemDelegate.qml</file>
+    </qresource>
+</RCC>
