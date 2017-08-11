@@ -63,7 +63,7 @@ ApplicationWindow {
                     onDropped: {
                         //drop.acceptProposedAction()
                         var txt = drop.text;
-                        var fmts = JSON.stringify(drop.formats);
+                         var fmts = JSON.stringify(drop.formats);
                         console.log("dropped into dest ", txt)
                     }
                     onEntered: {

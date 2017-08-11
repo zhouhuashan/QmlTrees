@@ -4,5 +4,6 @@
         <file>scripts/itemcreation.js</file>
         <file>SourceTreeItemDelegate.qml</file>
         <file>DraggableMouseArea.qml</file>
+        <file>DragIndicator.qml</file>
     </qresource>
 </RCC>
