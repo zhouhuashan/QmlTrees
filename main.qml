@@ -60,17 +60,26 @@ ApplicationWindow {
                         width: 300
                         height: 300
                     }
+
                     onDropped: {
-                        //drop.acceptProposedAction()
-                        var txt = drop.text;
-                         var fmts = JSON.stringify(drop.formats);
+                        var txt = drop.source.draggedData;
+                        var format = drop.source.draggedDataType;
+                        if (format.localeCompare("plaint/text"))
+                            drop.accept(Qt.IgnoreAction)
+
+
                         console.log("dropped into dest ", txt)
                     }
                     onEntered: {
                         console.log("entered dest")
-                    }
-                    onExited: {
+                        var format = drag.source.draggedDataType;
+                        var stringAreTheSame = format.localeCompare("text/plai3n") === 0;
+                        drag.source.restricted = !stringAreTheSame;
 
+                    }
+
+                    onExited: {
+                        drag.source.restricted = false
                     }
                     states: [
                         State {

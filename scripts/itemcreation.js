@@ -3,7 +3,7 @@ var draggedItem = null;
 var clickedComponentMousePosition;
 var positionInParent;
 
-function startDrag(mouse, parentItem, clickedComponent)
+function startDrag(mouse, parentItem, clickedComponent, mimeData)
 {
     itemComponent = null;
     clickedComponentMousePosition = { x: mouse.x, y: mouse.y }
@@ -11,11 +11,11 @@ function startDrag(mouse, parentItem, clickedComponent)
     positionInParent = clickedComponent.mapToItem(parentItem, 0, 0);
     console.debug("Position In Parent: "+ positionInParent.x + " " + positionInParent.y);
 
-    loadComponent(parentItem);
+    loadComponent(parentItem, mimeData);
 }
 
 //Creation is split into two functions due to an asynchronous wait while possible external files are loaded.
-function loadComponent(parentItem)
+function loadComponent(parentItem, mimeData)
 {
     if (itemComponent != null)
     {
@@ -25,6 +25,7 @@ function loadComponent(parentItem)
     }
 
     itemComponent = Qt.createComponent("../DragIndicator.qml");
+
     //Depending on the content, it can be ready or error immediately
     if (itemComponent.status === Component.Loading)
     {
@@ -32,11 +33,11 @@ function loadComponent(parentItem)
     }
     else
     {
-        createItem(parentItem);
+        createItem(parentItem, mimeData);
     }
 }
 
-function createItem(parentItem)
+function createItem(parentItem, mimeData)
 {
     if (itemComponent.status === Component.Ready && draggedItem == null)
     {
@@ -46,26 +47,20 @@ function createItem(parentItem)
                 "x": positionInParent.x,
                 "y": positionInParent.y,
                 "color":Qt.lighter("red", 1.5),
-                "isDraggable":true,
-
-                visible: true
+                visible: true,
+                "text": mimeData[0]
             }
         );
 
-
-        draggedItem.width = 100;
+        draggedItem.width = 200;
         draggedItem.height = 40;
         draggedItem.Drag.dragType = Drag.Internal
         draggedItem.Drag.supportedActions = Qt.CopyAction
         draggedItem.Drag.hotSpot.x = draggedItem.width / 2;
         draggedItem.Drag.hotSpot.y = draggedItem.height / 2;
-        draggedItem.data = "aaaa";
-        draggedItem.dataType ="text"
-        draggedItem.color = Qt.lighter("violet", 1.5);
-        draggedItem.Drag.formats = "text/plain";
-        draggedItem.Drag.mimeData = { "text/plain": "Hello Drag!" };
+        draggedItem.draggedData = mimeData[0];
+        draggedItem.draggedDataType = mimeData[1]
         draggedItem.Drag.supportedActions = Qt.CopyAction;
-        //draggedItem.mouseArea.drag.target = draggedItem.rectangle;
         draggedItem.Drag.active = true;
         draggedItem.Drag.start();
     }
@@ -78,31 +73,19 @@ function createItem(parentItem)
 
 function continueDrag(mouse)
 {
-    if (draggedItem == null)
-        return;
-
+    if (draggedItem == null) return;
 
     draggedItem.x = mouse.x + positionInParent.x - clickedComponentMousePosition.x;
     draggedItem.y = mouse.y + positionInParent.y - clickedComponentMousePosition.y;
     console.debug("mouse: "+ mouse.x + " " + mouse.y);
-    //console.debug("coordinatesChanged: "+ draggedItem.x + " " + draggedItem.y);
-    //console.debug("coordinatesChanged: "+ draggedItem.x + " " + draggedItem.y);
-    //console.debug("mouse: "+ mouse.x + " " + mouse.y);
-    //console.debug("posnInWindow: "+ posnInWindow.x + " " + posnInWindow.y);
-    //console.debug("clickedComponentMousePosition: "+ clickedComponentMousePosition.x + " " + clickedComponentMousePosition.y);
-    //console.debug("draggedItem: "+ draggedItem.x + " " + draggedItem.y);
 }
 
 function endDrag(mouse)
 {
-  if (draggedItem == null)
-        return;
+  if (draggedItem == null) return;
 
-    //var childRect = draggedItem.children[0];
     draggedItem.Drag.drop();
-    //draggedItem.InternalRectangle.Drag.drop()
     console.log("Dragging ended at " + draggedItem.x + " " + draggedItem.y);
     draggedItem.destroy();
     draggedItem = null;
-
 }

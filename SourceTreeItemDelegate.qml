@@ -14,6 +14,4 @@ Item {
     {
         id:draggableMouseArea
     }
-
-
 }

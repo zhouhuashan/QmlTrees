@@ -14,8 +14,10 @@ MouseArea {
     drag.target: (held && isDraggable) ? content : undefined
 
     Rectangle {
+
         id: content
         objectName: "content"
+
         color: (dragArea.held && dragArea.isDraggable) ? "lightsteelblue" : '#df3322'
         border.width: 1
         anchors {
@@ -25,8 +27,8 @@ MouseArea {
         width: dragArea.width
         height:40
         Drag.active: dragArea.drag.active
-        Drag.mimeData: {"text/plain": "Copied text" }
         Text {
+            id:rectangleText
             text: styleData.value
         }
 
@@ -47,15 +49,25 @@ MouseArea {
     }
     onPressAndHold: {
         held = true
-        //content.Drad.start();
         console.log("held:", held)
-        Code.startDrag(mouse, parent.parentWhenItemBeingDragged, content)
+        Code.startDrag(mouse,
+                       parent.parentWhenItemBeingDragged,
+                       content,
+                       [styleData.value, "text/plain"])
     }
     onPressed: {
     }
 
     onPositionChanged: {
-            Code.continueDrag(mouse);
+        if (content.Drag.target !== null)
+        {
+            var ds = content.Drag.target;
+            var t = 0;
+           // restricted
+        }
+
+        Code.continueDrag(mouse);
+
     }
 
     states: [
