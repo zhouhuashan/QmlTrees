@@ -4,21 +4,24 @@ import "scripts/itemcreation.js" as Code
 
 MouseArea {
     id:dragArea
-    property bool isDraggable:false
-    property bool held: false
-    property alias contentBackroungColor:content.color
-    property alias internalRectangle:content
     objectName: "dragArea"
+
+    property bool held: false
+    property color pressedBackroundColor:'lightsteelblue'
+    property color normalBackgroundColor:'#df3322'
+
+    property alias internalRectangle:content
+    property Item parentWhenItemBeingDragged
+
     anchors { left: parent.left; right: parent.right }
     height: content.height
-    drag.target: (held && isDraggable) ? content : undefined
+    //drag.target: held ? content : undefined
 
     Rectangle {
-
         id: content
         objectName: "content"
 
-        color: (dragArea.held && dragArea.isDraggable) ? "lightsteelblue" : '#df3322'
+        color: dragArea.held ? dragArea.pressedBackroundColor:dragArea.normalBackgroundColor
         border.width: 1
         anchors {
             horizontalCenter: dragArea.horizontalCenter
@@ -41,47 +44,38 @@ MouseArea {
     }
     onReleased: {
         held = false
-        console.log("held:", held)
+        console.log("Released")
         Code.endDrag(mouse)
-        //parent.Drag.drop()
         content.parent = content.Drag.target !== null ? content.Drag.target : parent
         content.Drag.drop()
     }
-    onPressAndHold: {
+
+    onPressed: {
         held = true
-        console.log("held:", held)
+        console.log("Pressed")
         Code.startDrag(mouse,
-                       parent.parentWhenItemBeingDragged,
+                       parentWhenItemBeingDragged,
                        content,
                        [styleData.value, "text/plain"])
     }
-    onPressed: {
-    }
 
     onPositionChanged: {
-        if (content.Drag.target !== null)
-        {
-            var ds = content.Drag.target;
-            var t = 0;
-           // restricted
-        }
-
         Code.continueDrag(mouse);
-
     }
 
     states: [
         State {
-            when: held && isDraggable
+            when: held
             name: "draggingState"
 
             ParentChange {
-                target: content
-                parent: parentWhenItemBeingDragged
+               // target: content
+               // parent: parentWhenItemBeingDragged
             }
+
             PropertyChanges {
                 target: content
-                opacity: 0.3
+                color:pressedBackroundColor
             }
 
             AnchorChanges{

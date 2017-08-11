@@ -44,16 +44,12 @@ function createItem(parentItem, mimeData)
         draggedItem = itemComponent.createObject(
             parentItem,
             {
-                "x": positionInParent.x,
-                "y": positionInParent.y,
-                "color":Qt.lighter("red", 1.5),
-                visible: true,
-                "text": mimeData[0]
+                x: positionInParent.x - 4,
+                y: positionInParent.y - 4,
+                text: mimeData[0]
             }
         );
 
-        draggedItem.width = 200;
-        draggedItem.height = 40;
         draggedItem.Drag.dragType = Drag.Internal
         draggedItem.Drag.supportedActions = Qt.CopyAction
         draggedItem.Drag.hotSpot.x = draggedItem.width / 2;
