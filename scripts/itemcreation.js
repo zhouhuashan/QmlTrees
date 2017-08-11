@@ -11,7 +11,7 @@ function startDrag(mouse, parentItem, clickedComponent)
     positionInParent = clickedComponent.mapToItem(parentItem, 0, 0);
     console.debug("Position In Parent: "+ positionInParent.x + " " + positionInParent.y);
 
-    loadComponent(parentItem, itemMouseArea, itemRect);
+    loadComponent(parentItem, dragArea, clickedComponent);
 }
 
 //Creation is split into two functions due to an asynchronous wait while possible external files are loaded.
@@ -24,7 +24,7 @@ function loadComponent(parentItem)
         return;
     }
 
-    itemComponent = Qt.createComponent("../SourceTreeItemDelegate.qml");
+    itemComponent = Qt.createComponent("../DraggableMouseArea.qml");
     //Depending on the content, it can be ready or error immediately
     if (itemComponent.status === Component.Loading)
     {
@@ -45,8 +45,9 @@ function createItem(parentItem)
             {
                 "x": positionInParent.x,
                 "y": positionInParent.y,
-                "baseColor":Qt.lighter("red", 1.5),
-                "copyable":false,
+                "color":Qt.lighter("red", 1.5),
+                "isDraggable":true,
+
                 visible: true
             }
         );
@@ -56,7 +57,9 @@ function createItem(parentItem)
         var ch1 = ch0.children[0];
         //for(var i = 0; i < draggedItem.children.length; ++i)
            //      console.log(draggedItem.childAt[i].type);
-
+        draggedItem.width = 100;
+        draggedItem.height = 40;
+        draggedItem.contentBackroungColor = Qt.lighter("violet", 1.5);
         draggedItem.Drag.formats = "text/plain";
         draggedItem.Drag.mimeData = { "text/plain": "Hello Drag!" };
         draggedItem.Drag.supportedActions = Qt.CopyAction;
@@ -94,10 +97,11 @@ function endDrag(mouse)
   if (draggedItem == null)
         return;
 
-    draggedItem.Drag.drop();
-    //draggedItem.dragRectangleId.Drag.drop()
+    var childRect = draggedItem.children[0];
+    childRect.Drag.drop();
+    //draggedItem.InternalRectangle.Drag.drop()
     console.log("Dragging ended at " + draggedItem.x + " " + draggedItem.y);
-    //draggedItem.destroy();
-    //draggedItem = null;
+    draggedItem.destroy();
+    draggedItem = null;
 
 }

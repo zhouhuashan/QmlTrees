@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>scripts/itemcreation.js</file>
         <file>SourceTreeItemDelegate.qml</file>
+        <file>DraggableMouseArea.qml</file>
     </qresource>
 </RCC>
