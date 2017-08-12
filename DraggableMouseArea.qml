@@ -7,28 +7,35 @@ MouseArea {
     objectName: "dragArea"
 
     property bool held: false
-    property color pressedBackroundColor:'lightsteelblue'
-    property color normalBackgroundColor:'#df3322'
 
-    property alias internalRectangle:content
+    property color pressedBackgroundColor
+    property color normalBackgroundColor
+
     property Item parentWhenItemBeingDragged
+    property int borderWidth
+    property color borderColor
 
     anchors { left: parent.left; right: parent.right }
-    height: content.height
+    height: parent.height
+
     //drag.target: held ? content : undefined
 
     Rectangle {
         id: content
         objectName: "content"
 
-        color: dragArea.held ? dragArea.pressedBackroundColor:dragArea.normalBackgroundColor
-        border.width: 1
+        color: dragArea.held ? dragArea.pressedBackgroundColor:dragArea.normalBackgroundColor
+        border.color: borderColor
         anchors {
             horizontalCenter: dragArea.horizontalCenter
             verticalCenter: dragArea.verticalCenter
+            fill:dragArea
+
         }
-        width: dragArea.width
-        height:40
+
+        border.width:borderWidth
+        width: parent.width
+        height:parent.height
         Drag.active: dragArea.drag.active
         Text {
             id:rectangleText
@@ -68,14 +75,9 @@ MouseArea {
             when: held
             name: "draggingState"
 
-            ParentChange {
-               // target: content
-               // parent: parentWhenItemBeingDragged
-            }
-
             PropertyChanges {
                 target: content
-                color:pressedBackroundColor
+                color:pressedBackgroundColor
             }
 
             AnchorChanges{

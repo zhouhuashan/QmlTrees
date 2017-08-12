@@ -11,11 +11,11 @@ function startDrag(mouse, parentItem, clickedComponent, mimeData)
     positionInParent = clickedComponent.mapToItem(parentItem, 0, 0);
     console.debug("Position In Parent: "+ positionInParent.x + " " + positionInParent.y);
 
-    loadComponent(parentItem, mimeData);
+    loadComponent(parentItem, clickedComponent, mimeData);
 }
 
 //Creation is split into two functions due to an asynchronous wait while possible external files are loaded.
-function loadComponent(parentItem, mimeData)
+function loadComponent(parentItem, clickedComponent, mimeData)
 {
     if (itemComponent != null)
     {
@@ -33,11 +33,11 @@ function loadComponent(parentItem, mimeData)
     }
     else
     {
-        createItem(parentItem, mimeData);
+        createItem(parentItem, clickedComponent, mimeData);
     }
 }
 
-function createItem(parentItem, mimeData)
+function createItem(parentItem, clickedComponent, mimeData)
 {
     if (itemComponent.status === Component.Ready && draggedItem == null)
     {
@@ -46,7 +46,13 @@ function createItem(parentItem, mimeData)
             {
                 x: positionInParent.x - 4,
                 y: positionInParent.y - 4,
-                text: mimeData[0]
+                text: mimeData[0],
+                height:clickedComponent.height,
+                width:clickedComponent.width,
+                opacity:0.7,
+                color:'brown',
+                'border.color': '#ffffff80',
+                'border.width':6
             }
         );
 
@@ -58,6 +64,7 @@ function createItem(parentItem, mimeData)
         draggedItem.draggedDataType = mimeData[1]
         draggedItem.Drag.supportedActions = Qt.CopyAction;
         draggedItem.Drag.active = true;
+        draggedItem.turnOnDraggingStateIndicator();
         draggedItem.Drag.start();
     }
     else if (itemComponent.status === Component.Error) {

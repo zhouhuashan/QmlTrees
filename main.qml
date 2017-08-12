@@ -35,13 +35,10 @@ ApplicationWindow {
                 objectName: "dropArea"
                 width: 300
                 height: 300
-                backgroundColor: '#30aa66'
+                normalBackgroundColor: '#30aa66'
+                droppingBackgroundColor:'yellow'
                 accetableMimeTypes: ["text/plain", "text/html"]
             }
-
-
         }
-
-
     }
 }

@@ -1,18 +1,21 @@
 import QtQuick 2.0
 
-Item {
+Item
+{
     id: draggableDelegateItem
     objectName: "draggableDelegateItem"
 
     property alias held:draggableMouseArea.held
-    property color baseColor:'orange'
-    property Item parentWhenItemBeingDragged
+    property int borderWidth
+    property alias parentWhenItemBeingDragged:draggableMouseArea.parentWhenItemBeingDragged
+    property alias pressedBackgroundColor:draggableMouseArea.pressedBackgroundColor
+    property color normalBackgroundColor:draggableMouseArea.normalBackgroundColor
+    property alias borderColor:draggableMouseArea.borderColor
 
     DraggableMouseArea
     {
         id:draggableMouseArea
-        pressedBackroundColor: '#0080FF'
-        normalBackgroundColor: '#0040FF'
-        parentWhenItemBeingDragged:draggableDelegateItem.parentWhenItemBeingDragged
+        normalBackgroundColor: draggableDelegateItem.normalBackgroundColor
+        borderWidth: draggableDelegateItem.borderWidth
     }
 }

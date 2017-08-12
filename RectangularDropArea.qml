@@ -2,7 +2,8 @@ import QtQuick 2.0
 
 DropArea
 {
-    property alias backgroundColor: dropRectangle.color
+    property alias normalBackgroundColor: dropRectangle.color
+    property color droppingBackgroundColor
     property var accetableMimeTypes:[]
     Rectangle{
         id: dropRectangle
@@ -16,10 +17,15 @@ DropArea
         var ar = accetableMimeTypes.filter(function(mimetype){
             return format.localeCompare(mimetype) === 0;
         });
+
         if (ar.length < 1)
+        {
             drop.accept(Qt.IgnoreAction)
+        }
         else
+        {
             drop.accept(Qt.IgnoreAction)
+        }
         console.log("onDropped")
     }
     onEntered: {
@@ -29,19 +35,26 @@ DropArea
             return format.localeCompare(mimetype) === 0;
         });
 
-        drag.source.restricted = !mimeTypeSupported;
-
+        if(!mimeTypeSupported)
+        {
+            drag.source.turnOnRestrictedStateIndicator();
+        }
+        else
+        {
+            drag.source.turnOnAllowedStateIndicator();
+        }
     }
 
     onExited: {
-        drag.source.restricted = false
+        drag.source.turnOnDraggingStateIndicator();
     }
+
     states: [
         State {
             when: containsDrag
             PropertyChanges {
                 target: dropRectangle
-                color: "grey"
+                color: droppingBackgroundColor
             }
         }
     ]

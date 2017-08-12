@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.5
+import QtQuick.Controls.Styles 1.4
 
 TreeView
 {
@@ -16,10 +17,23 @@ TreeView
     rowDelegate: Rectangle {
         height: 40
         color: 'red'
+        anchors.topMargin: 7
+    }
+
+    style: TreeViewStyle {
+        branchDelegate: Rectangle {
+            width: 16
+            height: 16
+            color: styleData.isExpanded ? "green" : "#f38923"
+        }
+        frame: Rectangle {border {color: "blue"}}
     }
 
     itemDelegate: SourceTreeItemDelegate {
-        baseColor: 'orange'
         parentWhenItemBeingDragged: rootRectangle
+        pressedBackgroundColor: '#0080FF'
+        normalBackgroundColor: '#0040FF'
+        borderColor: '#AB0B3B'
+        borderWidth:2
     }
 }

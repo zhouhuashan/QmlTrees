@@ -6,26 +6,58 @@ import QtQuick 2.0
     property var draggedDataType
 
     property alias text:rectangleText.text
-    property alias restricted:restrictedId.visible
-    height:48
-    width:190
-    opacity:0.7
-    color:'brown'
-    border.color: '#ffffff80'
-    border.width:2
+
+    function turnOnRestrictedStateIndicator()
+    {
+        restrictedStateRectangleId.visible = true;
+        allowedStateRectangleId.visible = false;
+        draggingStateRectangleId.visible = false;
+    }
+
+    function turnOnAllowedStateIndicator()
+    {
+        restrictedStateRectangleId.visible = false;
+        allowedStateRectangleId.visible = true;
+        draggingStateRectangleId.visible = false;
+    }
+
+    function turnOnDraggingStateIndicator()
+    {
+        restrictedStateRectangleId.visible = false;
+        allowedStateRectangleId.visible = false;
+        draggingStateRectangleId.visible = true;
+    }
 
     Rectangle
     {
-        id:restrictedId
+        id:restrictedStateRectangleId
         width:32
         height: 32
-        color: 'green'
+        color: '#610B21'
         visible: false
     }
+
+    Rectangle
+    {
+        id:allowedStateRectangleId
+        width:32
+        height: 32
+        color: '#58FA58'
+        visible: false
+    }
+
+    Rectangle
+    {
+        id:draggingStateRectangleId
+        width:32
+        height: 32
+        color: '#D8D8D8'
+        visible: false
+    }
+
     Text {
         id:rectangleText
         anchors.centerIn: parent
-        text:""
         color:"black"
         font.pointSize: 12
         font.bold: true
