@@ -30,7 +30,6 @@ MouseArea {
             horizontalCenter: dragArea.horizontalCenter
             verticalCenter: dragArea.verticalCenter
             fill:dragArea
-
         }
 
         border.width:borderWidth

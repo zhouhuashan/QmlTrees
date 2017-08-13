@@ -7,5 +7,18 @@
         <file>DragIndicator.qml</file>
         <file>DraggableTreeView.qml</file>
         <file>RectangularDropArea.qml</file>
+        <file>RestrictedStateComponent.qml</file>
+        <file>AllowedStateComponent.qml</file>
+        <file>DraggingStateComponent.qml</file>
+        <file>GeneratedFiles/Debug/moc_testtreemodel.cpp</file>
+        <file>GeneratedFiles/qrc_qml.cpp</file>
+        <file>resources/icons/dragging.png</file>
+        <file>resources/icons/dropaccepted.png</file>
+        <file>resources/icons/droprestricted.png</file>
+        <file>main.cpp</file>
+        <file>testtreemodel.cpp</file>
+        <file>testtreemodel.h</file>
+        <file>treeitem.cpp</file>
+        <file>treeitem.h</file>
     </qresource>
 </RCC>

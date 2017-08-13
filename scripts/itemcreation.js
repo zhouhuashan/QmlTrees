@@ -44,17 +44,19 @@ function createItem(parentItem, clickedComponent, mimeData)
         draggedItem = itemComponent.createObject(
             parentItem,
             {
-                x: positionInParent.x - 4,
-                y: positionInParent.y - 4,
-                text: mimeData[0],
-                height:clickedComponent.height,
-                width:clickedComponent.width,
-                opacity:0.7,
-                color:'brown',
-                'border.color': '#ffffff80',
-                'border.width':6
+                x: positionInParent.x - 2,
+                y: positionInParent.y - 2,
+
+                height: clickedComponent.height+16,
+                width: clickedComponent.width,
+                color: 'transparent'
             }
         );
+
+        clickedComponent.grabToImage(function(result)
+        {
+           draggedItem.backgroundImage = result.url;
+        });
 
         draggedItem.Drag.dragType = Drag.Internal
         draggedItem.Drag.supportedActions = Qt.CopyAction

@@ -31,9 +31,9 @@ TreeView
 
     itemDelegate: SourceTreeItemDelegate {
         parentWhenItemBeingDragged: rootRectangle
-        pressedBackgroundColor: '#0080FF'
-        normalBackgroundColor: '#0040FF'
-        borderColor: '#AB0B3B'
+        pressedBackgroundColor: '#FAFAFA'
+        normalBackgroundColor: '#E6E6E6'
+        borderColor: '#A4A4A4'
         borderWidth:2
     }
 }
