@@ -57,16 +57,24 @@ MouseArea {
     }
 
     onPressed: {
-        held = true
+        var indexSelected = styleData.index ;
+        var indexParent   = indexSelected.parent;
+        held = indexParent.valid;
         console.log("Pressed")
-        Code.startDrag(mouse,
+        if (held)
+        {
+            Code.startDrag(mouse,
                        parentWhenItemBeingDragged,
                        content,
                        [styleData.value, "text/plain"])
+        }
     }
 
     onPositionChanged: {
-        Code.continueDrag(mouse);
+        if (held)
+        {
+            Code.continueDrag(mouse);
+        }
     }
 
     states: [

@@ -47,7 +47,7 @@ function createItem(parentItem, clickedComponent, mimeData)
                 x: positionInParent.x - 2,
                 y: positionInParent.y - 2,
 
-                height: clickedComponent.height+16,
+                height: clickedComponent.height + 16,
                 width: clickedComponent.width,
                 color: 'transparent'
             }
@@ -60,8 +60,8 @@ function createItem(parentItem, clickedComponent, mimeData)
 
         draggedItem.Drag.dragType = Drag.Internal
         draggedItem.Drag.supportedActions = Qt.CopyAction
-        draggedItem.Drag.hotSpot.x = draggedItem.width / 2;
-        draggedItem.Drag.hotSpot.y = draggedItem.height / 2;
+        draggedItem.Drag.hotSpot.x = draggedItem.width >> 1;
+        draggedItem.Drag.hotSpot.y = draggedItem.height >> 1;
         draggedItem.draggedData = mimeData[0];
         draggedItem.draggedDataType = mimeData[1]
         draggedItem.Drag.supportedActions = Qt.CopyAction;
